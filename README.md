@@ -1,261 +1,297 @@
-MarketPulse — A Smart Market Watchlist
+# MarketPulse
 
-Not just another stock ticker. A financial intelligence system that surfaces what matters.
+A financial intelligence platform that surfaces meaningful market changes instead of overwhelming users with noise.
 
-🎯 The Problem
+**Live:** https://marketpulse.vercel.app  
+**Backend:** https://marketpulse-backend.onrender.com  
+**Built in:** 72 hours (solo)
 
-Stock watchlists are noisy. Users get overwhelmed by daily price ticks, percentage changes, and information overload. They miss opportunities because meaningful movements are buried in noise. What they actually need: A system that distinguishes signal from noise and shows them what deserves their attention right now.
+---
 
-💡 The Solution
+## Problem
 
-MarketPulse is an intelligent watchlist that surfaces only what has meaningfully changed since you last checked. Using domain-driven engines that detect:
+Stock watchlists show every price tick. Users miss signal in the noise. What they need: a system that distinguishes what actually matters.
 
-Price movements relative to peer context (not absolute numbers)
-Volume anomalies and momentum shifts
-Correlation changes between stocks
-Attention ranking to surface top 3 insights vs. everything
+## Solution
 
-Users can focus on 3 truly important changes instead of scrolling 20 trivial ticks.
+MarketPulse detects meaningful changes using domain-driven engines:
 
-✨ Core Features
-For Users
+- **Peer context:** A 2% move when peers are flat is signal. A 2% move in a +5% day is noise.
+- **Volume anomalies:** Detects unusual trading activity automatically.
+- **Correlation shifts:** Tells users when holdings start moving together.
+- **Attention budget:** Users choose: show top 3 changes or show all 20.
 
-✅ Create & Manage Watchlists — Organize stocks into custom lists
-✅ Meaningful Change Detection — See only what matters, ranked by attention
-✅ Market Context — Stock performance vs. peers + sector trends
-✅ Data Freshness States — Know if data is Live, Delayed, Stale, or Unavailable
-✅ Session Persistence — Resume exactly where you left off
-✅ Dark & Light Themes — Visual preference that respects battery life
-✅ Responsive Design — Desktop, tablet, mobile all supported
-✅ Account Management — Email/password auth with session persistence
+Result: Users see 3 truly important changes instead of scrolling noise.
 
-For Scale
+---
 
-✅ Efficient State Management — In-flight dedup, 8s TTL cache
-✅ Graceful Degradation — Falls back to demo data if provider fails
-✅ TypeScript Throughout — Compile-time safety, zero runtime surprises
-✅ Deterministic Testing — Demo mode produces same data every run
-✅ Domain-Driven Architecture — Pure logic engines testable independently
+## Features
 
-🏗️ Architecture: Why These Choices
-Frontend: React + TypeScript + Vite
+- Create and manage watchlists
+- Meaningful change detection with peer context
+- Attention budget controls (top 3, 5, 10, or all)
+- Sensitivity slider for configurable thresholds
+- Data freshness states (Live/Delayed/Stale/Unavailable)
+- Session persistence across devices
+- Dark and light themes
+- Email/password authentication
+- Responsive design (desktop, tablet, mobile)
+- 26 unit tests, all passing
 
-Why TypeScript? Catch type errors at build-time, not runtime. In fintech, a NaN creeping through costs trust.
+---
 
-Why Vite? Fast dev loop (instant HMR), minimal bundle (240KB gzipped), no build overhead during 72-hour sprint.
+## Quick Start
 
-Why clean component structure? Pages, components, hooks, context — each file has one reason to change. Easier to navigate when debugging at 2 AM.
+### Local Development
 
-Backend: Node.js + Express + PostgreSQL
-
-Why Node? JavaScript everywhere means faster iteration. One language for API, scripts, migrations.
-
-Why PostgreSQL? Structured data (watchlists, stocks, relationships), ACID guarantees (don't lose user data), JSON support (flexibility).
-
-Why TypeScript on backend? Same reason as frontend — catch errors before production.
-
-The Domain Engines: Where Thoughtfulness Lives
-
-Instead of just surfacing price changes, MarketPulse has 4 pure logic engines:
-
-changeEngine — Detects what counts as "meaningful"
-Not: "stock moved 2%"
-Yes: "stock moved 5% while sector moved 1% (outperforming)"
-peerContextEngine — Compares to peers automatically
-"NVDA +3% vs sector +0.5% = Worth watching"
-correlationEngine — Detects group movements
-"Tech sector correlation jumped 0.85; individual picks matter less"
-attentionRanking — Surfaces top N changes
-"Attention budget = 3" → Show 3 things, not 30
-
-Each engine is tested independently (26 unit tests, 100% pass). You can change "meaningful change" definition by tuning 3 numbers, not refactoring 10 files.
-
-🚀 What Deserves Your Attention
-Engineering Depth
-✅ Domain-driven design — Logic separated from HTTP/DB concerns
-✅ Comprehensive error handling — Stale data doesn't crash the app
-✅ Caching strategy — 8s TTL + in-flight dedup = 70% fewer API calls
-✅ Data consistency — Users see consistent snapshots, not race conditions
-✅ Tested logic — Unit tests for all domain engines
-Problem Interpretation
-✅ Understood that "meaningful" ≠ "any price change"
-✅ Implemented attention budget (3, 5, 10, or all)
-✅ Added sensitivity slider for different user preferences
-✅ Built graceful degradation (demo mode matches production exactly)
-Resilience & Edge Cases
-✅ Provider fails? System falls back to last known good snapshot + demo data
-✅ Delayed data? Users see freshness state (Live/Delayed/Stale/Unavailable)
-✅ No network? Demo mode with deterministic data works offline
-✅ Race conditions? Session-based state + snapshot isolation
-✅ Cold start? Service spins up in <3s, demo data loads instantly
-Code Quality
-✅ No any types (TypeScript strict mode)
-✅ No magic numbers (all config in one place)
-✅ No God components (max 200 lines per file)
-✅ No console.logs (proper logging with Pino)
-✅ No hardcoded URLs (environment variables for all config)
-Simplicity
-✅ 4 domain engines vs. a monolithic "meaningful change" function
-✅ Demo mode vs. skipping tests because "no API"
-✅ CSS-in-JS over Tailwind sprawl — 200 utility classes, not 1000
-✅ PostgreSQL over NoSQL — Structured data, enforced relationships
-Originality of Thought
-✅ Attention budget — Not "show me all changes," but "show me top 3"
-✅ Sensitivity slider — One person's "meaningful" ≠ another's
-✅ Peer context — Stock performance is relative, not absolute
-✅ Correlation detection — When stocks move together, individual picks matter less
-✅ Freshness states — Users know data quality, can make informed decisions
-📊 Functional Completeness
-Requirement	Status	How
-Create watchlist	✅	Database stores, UI manages
-View latest market info	✅	Yahoo Finance API (or demo data)
-Return later, see changes	✅	Session persistence + snapshot comparison
-Meaningful change detection	✅	Domain engines (peer context, volume, correlation)
-Handle stale/delayed data	✅	Freshness states + graceful fallback
-Scale for larger watchlists	✅	Cached queries, pagination ready
-Scale for more users	✅	Stateless API, DB indexes, connection pooling
-End-to-end build	✅	Frontend deployed on Vercel, backend on Render
-🔧 Setup & Run
-Prerequisites
-Node.js 18+
-PostgreSQL 15+ (or Docker)
-npm/yarn
-Local Development
-bash
-# Clone & enter project
+```bash
 git clone https://github.com/shamrutha16/marketpulse.git
 cd marketpulse-complete
 
-# Backend setup
+# Backend
 cd backend
 npm install
 npm run build
+DATABASE_URL="postgresql://user:pass@localhost/marketpulse" npm run db:migrate
 npm run start
 
-# Frontend setup (new terminal)
+# Frontend (new terminal)
 cd frontend
 npm install
 npm run dev
+```
 
-Visit: http://localhost:5173
+Visit http://localhost:5173
 
-With Docker (Recommended)
-bash
+### Docker
+
+```bash
 cd backend
 docker-compose up -d
 npm run db:migrate
 npm run seed
 npm run start
-Environment Variables
-bash
+```
+
+### Environment
+
+```bash
 # backend/.env
-DATABASE_URL=postgresql://user:pass@localhost:5432/marketpulse
-MARKET_DATA_MODE=yahoo    # or "demo"
+DATABASE_URL=postgresql://user:pass@localhost/marketpulse
+MARKET_DATA_MODE=yahoo      # or demo
 CORS_ORIGIN=http://localhost:5173
 NODE_ENV=development
-Run Tests
-bash
+```
+
+### Tests
+
+```bash
 cd backend
-npm test              # All tests
-npm run test:watch    # Watch mode
-🌐 Live Deployment
-Frontend: https://marketpulse.vercel.app
-Backend API: https://marketpulse-backend.onrender.com
-GitHub: https://github.com/shamrutha16/marketpulse
-📋 Project Structure
+npm test
+```
+
+Results: 26 passing, 0 failing.
+
+---
+
+## Architecture
+
+### Frontend
+- React 18 + TypeScript + Vite
+- 5 pages: Landing, Watchlist, Market, StockDetail, Settings
+- 8+ reusable components
+- Tailwind CSS with custom utilities
+- Deployed on Vercel
+
+### Backend
+- Node.js + Express + TypeScript
+- 4 domain engines (pure, testable functions)
+- 3 market data providers (Yahoo Finance, Demo, Fallback)
+- PostgreSQL with 8 tables
+- Session-based authentication
+- Deployed on Render
+
+### Database
+- PostgreSQL 15
+- 8 tables with proper relationships
+- Foreign key constraints
+- Indexes on hot queries
+
+---
+
+## Technical Decisions
+
+### Domain-Driven Design
+Business logic separated from HTTP and database. Means:
+- Logic is testable without mocking
+- Changing data sources doesn't break business rules
+- Behavior adjusted by tweaking parameters, not refactoring
+
+### Three Data Providers
+- **Yahoo Finance:** Live data
+- **Demo:** Deterministic synthetic data
+- **Fallback:** Last known snapshot
+
+Result: No single point of failure. System works when APIs fail.
+
+### Attention Budget
+Users choose how many changes to see: top 3, 5, 10, or all.
+
+Result: Respects user attention as finite. Simple setting, massive UX impact.
+
+### Peer Context
+Every price change compared to peer group automatically.
+
+Result: Eliminates false positives. Users see truly meaningful moves.
+
+### Deterministic Demo Data
+Synthetic data that's exactly reproducible. Same output every run.
+
+Result: No flakiness. System works offline. Judges see consistent behavior.
+
+### TypeScript Everywhere
+Type safety on both frontend and backend.
+
+Result: Errors caught at compile time, not runtime.
+
+### PostgreSQL
+Relational database with enforced schema and foreign keys.
+
+Result: No orphaned records possible. Data integrity guaranteed.
+
+---
+
+## Metrics
+
+| Metric | Value |
+|--------|-------|
+| Frontend Code | 1000+ lines React/TypeScript |
+| Backend Code | 3000+ lines Node/TypeScript |
+| Database | 8 tables, properly indexed |
+| Tests | 26 passing, zero warnings |
+| Pages | 5 main (Landing, Watchlist, Market, Detail, Settings) |
+| Components | 8+ reusable |
+| Endpoints | 12 REST endpoints |
+| Domain Engines | 4 (change, peer context, correlation, ranking) |
+| Data Providers | 3 (Yahoo, Demo, Fallback) |
+
+---
+
+## What Distinguishes This
+
+Most watchlist apps show absolute numbers. MarketPulse detects context.
+
+- Not: "NVDA +2%"
+- Yes: "NVDA +2% while tech sector +0.5% (outperforming)"
+
+Users get peer comparisons automatically. Correlation detection automatically. Attention budget automatically.
+
+These aren't obvious features. They're the result of thinking about what users actually need.
+
+---
+
+## Deployment
+
+**Frontend:** https://marketpulse.vercel.app
+- Vercel with auto-deploys from GitHub
+- Build: `npm run build`
+- Output: `dist/`
+
+**Backend:** https://marketpulse-backend.onrender.com
+- Render with PostgreSQL database
+- Build: `npm install && npm run build`
+- Start: `npm run start`
+
+**Database:** PostgreSQL 15 on Render
+- Auto-backups enabled
+- Connection pooling configured
+
+---
+
+## How to Test
+
+1. Open https://marketpulse.vercel.app
+2. Sign up with any email/password
+3. Add stocks to watchlist
+4. Toggle between Light/Dark themes
+5. Check sensitivity slider in Settings
+6. Change attention budget
+
+Live data updates every 8 seconds. Demo mode available by setting `MARKET_DATA_MODE=demo`.
+
+---
+
+## Project Structure
+
+```
 marketpulse/
-├── frontend/                    # React + TypeScript
+├── frontend/
 │   ├── src/
-│   │   ├── pages/              # Landing, Watchlist, Market, Stock Detail
-│   │   ├── components/         # Reusable UI components
-│   │   ├── context/            # Auth + theme state
-│   │   ├── services/           # API calls
-│   │   └── styles/             # Tailwind + custom CSS
+│   │   ├── pages/           Landing, Watchlist, Market, etc.
+│   │   ├── components/      Reusable UI components
+│   │   ├── context/         Auth, theme state
+│   │   ├── services/        API client
+│   │   ├── data/            Types, demo data
+│   │   └── styles/          Tailwind utilities
 │   └── vite.config.ts
 │
-└── backend/                     # Node.js + Express
+└── backend/
     ├── src/
-    │   ├── domain/             # Pure logic engines (testable)
-    │   ├── providers/          # Yahoo Finance + Demo data
-    │   ├── repositories/       # Database queries
-    │   ├── api/routes/         # REST endpoints
-    │   ├── middleware/         # Auth, error handling
-    │   └── db/                 # Schema, migrations
-    ├── tsconfig.json
-    └── package.json
-🧪 Testing
-26 unit tests covering all domain engines
-Change detection tested with real market scenarios
-Peer context tested for edge cases (new stocks, zero volume)
-Correlation tested for stability
-All tests passing with zero warnings
-bash
-npm test
-# ✓ changeEngine (8 tests)
-# ✓ peerContextEngine (4 tests)
-# ✓ correlationEngine (3 tests)
-# ✓ attentionRanking (3 tests)
-# ✓ API integration (8 tests)
-💭 Key Design Decisions & Their Rationale
-Decision 1: Domain-Driven Architecture
+    │   ├── domain/          changeEngine, peerContext, correlation, ranking
+    │   ├── providers/       Yahoo, Demo, Fallback
+    │   ├── repositories/    Database queries
+    │   ├── api/routes/      12 REST endpoints
+    │   ├── middleware/      Auth, errors, logging
+    │   └── db/              Schema, migrations
+    └── tsconfig.json
+```
 
-Why? Separates business logic ("what is meaningful") from HTTP/DB concerns. If Groww decides to change what "meaningful" means, we change 3 functions, not 20 files.
+---
 
-Trade-off: More files upfront, but pays off in maintainability.
+## Code Quality
 
-Decision 2: Attention Budget (Top 3, 5, 10, All)
+- No `any` types (TypeScript strict mode)
+- All inputs validated (Zod)
+- Comprehensive error handling
+- Clear separation of concerns
+- 26 unit tests, all passing
+- Zero flaky tests
+- No magic numbers (all config in env vars)
 
-Why? Users can't digest 20 notifications. Let them choose: "Give me top 3" or "I want everything." Respects different user mental models.
+---
 
-Trade-off: Adds UI complexity for massive UX gain.
+## Future Work
 
-Decision 3: Demo Mode with Deterministic Data
+With more time:
+- Real-time WebSocket updates
+- Push notifications
+- Portfolio-level analysis
+- Historical performance tracking
+- Mobile app (React Native)
+- Advanced charting
 
-Why? Yahoo Finance API can flake. Instead of faking it or skipping tests, we generate realistic synthetic data that's exactly reproducible. Judges see the same app every time, no flakiness.
+---
 
-Trade-off: Extra code, but worth it for reliability in a judged hackathon.
+## Built By
 
-Decision 4: TypeScript Everywhere
+**Shamrutha**  
+Solo build in 72 hours.  
+Full-stack: design, frontend, backend, database, deployment, testing.
 
-Why? One language end-to-end means shared types between frontend and backend. A Stock type is enforced everywhere, not guessed.
+---
 
-Trade-off: Slower initial setup, but catches errors at compile-time.
+## License
 
-Decision 5: PostgreSQL over MongoDB
+MIT
 
-Why? Watchlists have relationships (user → watchlist → stocks). Relational schema enforces data integrity. Foreign keys prevent orphaned records.
+---
 
-Trade-off: Schema upfront (good for thinking clearly), not NoSQL flexibility.
+## Contact
 
-🎓 What We'd Do Differently (With More Time)
- Real-time WebSocket updates for live price changes
- Alerts & notifications when attention threshold hit
- Portfolio analysis (beta, correlation matrix, concentration)
- Historical performance tracking (ROI since added to watchlist)
- Social features (follow expert watchlists, see what others are watching)
+- GitHub: https://github.com/shamrutha16/marketpulse
+- Live Demo: https://marketpulse.vercel.app
+- Backend: https://marketpulse-backend.onrender.com/api/health
 
-But for 72 hours, we optimized for depth over breadth. The four domain engines are solid, tested, extensible.
+---
 
-📝 100-Word Product Pitch
-
-MarketPulse is a smart market watchlist that surfaces only what matters. Instead of overwhelming users with 30 daily price ticks, our domain-driven engines detect truly meaningful changes: stocks outperforming peers, volume anomalies, correlation shifts. Users set an attention budget (top 3, 5, 10, or all) and see only actionable insights. Built end-to-end with React, Node.js, and PostgreSQL, the system handles stale data gracefully, scales horizontally, and is thoroughly tested. Our originality: we didn't build another ticker—we built a system that respects user attention and makes financial data accessible through thoughtful architecture, not feature count.
-
-🏆 Why MarketPulse Stands Out
-It Works — Deployed live, tested under load, no shortcuts taken
-It's Thoughtful — Every design decision can be defended with reasoning
-It's Resilient — Handles 6 edge cases (stale data, network failure, race conditions, etc.)
-It's Maintainable — Domain logic separated from framework code; easy to change behavior
-It's Original — "Meaningful change detection" + "attention budget" aren't obvious; they're insightful
-📞 Contact & Links
-GitHub: https://github.com/shamrutha16/marketpulse
-Live App: https://marketpulse.vercel.app
-Backend API: https://marketpulse-backend.onrender.com/api/health
-
-Built with intention. Deployed with confidence. Ready to defend every choice. 🚀
-
-Footer: Judges' Mindset
-
-"We're looking at how you think, not what you know. Can you explain every trade-off? Do you understand your own code? Can you defend your architecture?"
-
-✅ MarketPulse answers yes to all three. Every domain engine is testable. Every route is purposeful. Every line of CSS serves a design principle. We didn't optimize for "Groww wants X"—we built something we believe in, with clarity on why.
-
+**Built with intention. Deployed with confidence. Every choice is defensible.**
