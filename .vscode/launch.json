@@ -1,0 +1,16 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Backend (Node Debug)",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/backend/node_modules/.bin/tsx",
+      "args": ["${workspaceFolder}/backend/src/server.ts"],
+      "cwd": "${workspaceFolder}/backend",
+      "console": "integratedTerminal",
+      "restart": true,
+      "runtimeArgs": ["--loader=tsx/esm"]
+    }
+  ]
+}
