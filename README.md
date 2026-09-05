@@ -280,12 +280,6 @@ Full-stack: design, frontend, backend, database, deployment, testing.
 
 ---
 
-## License
-
-MIT
-
----
-
 ## Contact
 
 - GitHub: https://github.com/shamrutha16/marketpulse
